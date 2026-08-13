@@ -8,9 +8,10 @@ import { projects } from '../data/projects'
 <template>
   <div class="resume-page">
     <nav class="nav">
-      <RouterLink class="nav__brand" to="/">周玉佂</RouterLink>
+      <div class="nav__left">
+        <RouterLink class="nav__back" to="/">← 返回</RouterLink>
+      </div>
       <div class="nav__links">
-        <RouterLink class="nav__link" to="/">首页</RouterLink>
         <RouterLink class="nav__link" to="/blog">博客</RouterLink>
         <a class="nav__link" :href="profile.github" rel="noreferrer" target="_blank">GitHub</a>
       </div>
@@ -48,43 +49,55 @@ import { projects } from '../data/projects'
 
       <div class="content">
         <section>
-          <h2 class="sec-title">个人优势</h2>
-          <ul class="list">
-            <li v-for="item in profile.advantages" :key="item.title">
-              <strong>{{ item.title }}：</strong>{{ item.text }}
-            </li>
-          </ul>
+          <h2 class="sec-title">关于我</h2>
+          <div class="card-grid card-grid--about">
+            <article
+              v-for="(item, index) in profile.advantages"
+              :key="item.title"
+              class="info-card"
+            >
+              <span class="info-card__index" aria-hidden="true">
+                {{ String(index + 1).padStart(2, '0') }}
+              </span>
+              <h3 class="info-card__title">{{ item.title }}</h3>
+              <p class="info-card__text">{{ item.text }}</p>
+            </article>
+          </div>
         </section>
 
         <section>
-          <h2 class="sec-title">工作经历</h2>
-          <article v-for="job in experiences" :key="job.id" class="block">
-            <div class="block__head">
-              <h3>
-                {{ job.company }}
-                <span class="role">{{ job.role }}</span>
-              </h3>
-              <time>{{ job.period }}</time>
-            </div>
-            <ul class="list">
-              <li v-for="(point, i) in job.highlights" :key="i">{{ point }}</li>
-            </ul>
-          </article>
+          <h2 class="sec-title">我的经历</h2>
+          <div class="card-grid card-grid--exp">
+            <article v-for="job in experiences" :key="job.id" class="exp-card">
+              <div class="exp-card__head">
+                <div>
+                  <h3 class="exp-card__company">{{ job.company }}</h3>
+                  <p class="exp-card__role">{{ job.role }}</p>
+                </div>
+                <time class="exp-card__period">{{ job.period }}</time>
+              </div>
+              <ul class="exp-card__list">
+                <li v-for="(point, i) in job.highlights" :key="i">{{ point }}</li>
+              </ul>
+            </article>
+          </div>
         </section>
 
         <section>
           <h2 class="sec-title">项目经历</h2>
-          <article v-for="project in projects" :key="project.id" class="block">
-            <div class="block__head">
-              <h3>{{ project.title }}</h3>
-              <time>{{ project.period }}</time>
-            </div>
-            <div class="stack">{{ project.stack.join(' · ') }}</div>
-            <p class="desc">{{ project.summary }}</p>
-            <ul class="list">
-              <li v-for="(point, i) in project.highlights" :key="i">{{ point }}</li>
-            </ul>
-          </article>
+          <div class="card-grid card-grid--projects">
+            <article v-for="project in projects" :key="project.id" class="project-card">
+              <div class="project-card__head">
+                <h3>{{ project.title }}</h3>
+                <time>{{ project.period }}</time>
+              </div>
+              <div class="stack">{{ project.stack.join(' · ') }}</div>
+              <p class="desc">{{ project.summary }}</p>
+              <ul class="list">
+                <li v-for="(point, i) in project.highlights" :key="i">{{ point }}</li>
+              </ul>
+            </article>
+          </div>
         </section>
       </div>
     </div>
@@ -110,12 +123,31 @@ import { projects } from '../data/projects'
   backdrop-filter: blur(8px);
 }
 
-.nav__brand {
-  font-family: var(--font-display);
-  font-size: 1.15rem;
-  letter-spacing: 0.12em;
+.nav__left {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+}
+
+.nav__back {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.2rem;
+  padding: 0.4rem 0.8rem;
+  border-radius: 999px;
+  border: 1px solid color-mix(in srgb, var(--ink) 14%, transparent);
+  background: rgba(255, 255, 255, 0.72);
   color: var(--ink);
+  font-size: 0.86rem;
+  font-weight: 600;
   text-decoration: none;
+  transition: background 0.25s ease, border-color 0.25s ease, color 0.25s ease;
+}
+
+.nav__back:hover {
+  background: rgba(255, 255, 255, 0.95);
+  border-color: color-mix(in srgb, var(--accent) 40%, transparent);
+  color: var(--accent);
 }
 
 .nav__links {
@@ -201,7 +233,7 @@ section {
 }
 
 .sec-title {
-  margin: 0 0 0.85rem;
+  margin: 0 0 0.95rem;
   padding-bottom: 0.55rem;
   border-bottom: 2px solid var(--accent);
   font-size: 1.05rem;
@@ -209,17 +241,120 @@ section {
   letter-spacing: 0.04em;
 }
 
-.block {
-  padding: 0.9rem 0;
-  border-bottom: 1px dashed color-mix(in srgb, var(--ink) 12%, transparent);
+.card-grid {
+  display: grid;
+  gap: 0.9rem;
 }
 
-.block:last-child {
-  border-bottom: none;
-  padding-bottom: 0;
+.card-grid--about {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
 }
 
-.block__head {
+.card-grid--exp,
+.card-grid--projects {
+  grid-template-columns: 1fr;
+}
+
+.info-card,
+.exp-card,
+.project-card {
+  position: relative;
+  padding: 1.15rem 1.2rem;
+  border-radius: 16px;
+  background: color-mix(in srgb, var(--accent) 4%, white);
+  border: 1px solid color-mix(in srgb, var(--ink) 8%, transparent);
+  box-shadow: 0 8px 24px rgba(22, 53, 47, 0.05);
+  transition: transform 0.28s ease, box-shadow 0.28s ease;
+}
+
+.info-card:hover,
+.exp-card:hover,
+.project-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 14px 32px rgba(22, 53, 47, 0.1);
+}
+
+.info-card__index {
+  display: inline-block;
+  margin-bottom: 0.55rem;
+  font-family: var(--font-display);
+  font-size: 0.95rem;
+  letter-spacing: 0.08em;
+  color: var(--accent);
+}
+
+.info-card__title {
+  margin: 0 0 0.5rem;
+  font-size: 1rem;
+  color: var(--ink);
+  line-height: 1.4;
+}
+
+.info-card__text {
+  margin: 0;
+  font-size: 0.9rem;
+  line-height: 1.7;
+  color: var(--ink-soft);
+}
+
+.exp-card__head {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 0.45rem 1rem;
+  align-items: baseline;
+  margin-bottom: 0.75rem;
+}
+
+.exp-card__company {
+  margin: 0;
+  font-size: 1.02rem;
+  color: var(--ink);
+  line-height: 1.4;
+}
+
+.exp-card__role {
+  margin: 0.3rem 0 0;
+  color: var(--accent);
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+.exp-card__period {
+  color: var(--ink-muted);
+  font-size: 0.85rem;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.exp-card__list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  gap: 0.45rem;
+}
+
+.exp-card__list li {
+  position: relative;
+  padding-left: 0.95rem;
+  color: var(--ink-soft);
+  line-height: 1.7;
+  font-size: 0.9rem;
+}
+
+.exp-card__list li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0.62em;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--accent);
+}
+
+.project-card__head {
   display: flex;
   flex-wrap: wrap;
   justify-content: space-between;
@@ -228,20 +363,13 @@ section {
   margin-bottom: 0.55rem;
 }
 
-.block__head h3 {
+.project-card__head h3 {
   margin: 0;
   font-size: 1rem;
   color: var(--ink);
 }
 
-.role {
-  margin-left: 0.45rem;
-  color: var(--accent);
-  font-weight: 600;
-  font-size: 0.9rem;
-}
-
-.block__head time {
+.project-card__head time {
   color: var(--ink-muted);
   font-size: 0.85rem;
   white-space: nowrap;
@@ -277,10 +405,6 @@ section {
   font-size: 0.92rem;
 }
 
-.list strong {
-  color: var(--ink);
-}
-
 @media (max-width: 720px) {
   .content,
   .header {
@@ -288,10 +412,8 @@ section {
     padding-right: 1.1rem;
   }
 
-  .role {
-    display: block;
-    margin-left: 0;
-    margin-top: 0.25rem;
+  .card-grid--about {
+    grid-template-columns: 1fr;
   }
 }
 </style>

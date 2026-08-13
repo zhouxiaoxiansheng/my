@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { RouterLink, RouterView, useRoute } from 'vue-router'
+import { RouterView, useRoute } from 'vue-router'
 import { computed } from 'vue'
 
 const route = useRoute()
@@ -9,7 +9,6 @@ const isHome = computed(() => route.name === 'home')
 <template>
   <div class="page">
     <nav v-if="isHome" class="nav">
-      <RouterLink class="nav__brand" to="/">周玉佂</RouterLink>
       <div class="nav__links">
         <a
           class="nav__link"
@@ -66,18 +65,10 @@ const isHome = computed(() => route.name === 'home')
   z-index: 20;
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: flex-end;
   padding: 1rem clamp(1.25rem, 5vw, 3.5rem);
   background: linear-gradient(to bottom, rgba(236, 242, 239, 0.88), rgba(236, 242, 239, 0));
   backdrop-filter: blur(8px);
-}
-
-.nav__brand {
-  font-family: var(--font-display);
-  font-size: 1.15rem;
-  letter-spacing: 0.12em;
-  color: var(--ink);
-  text-decoration: none;
 }
 
 .nav__links {

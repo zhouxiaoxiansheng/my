@@ -10,36 +10,16 @@ import { RouterLink } from 'vue-router'
       <span class="orb orb--c" />
     </div>
 
-    <div class="home__intro">
-      <p
-        class="home__hello"
-        v-motion
-        :initial="{ opacity: 0, y: 20 }"
-        :enter="{ opacity: 1, y: 0, transition: { duration: 650, delay: 60 } }"
-      >
-        你好，我叫
-      </p>
-      <h1
-        class="home__name"
-        v-motion
-        :initial="{ opacity: 0, y: 36, filter: 'blur(8px)' }"
-        :enter="{
-          opacity: 1,
-          y: 0,
-          filter: 'blur(0px)',
-          transition: { duration: 850, delay: 160 },
-        }"
-      >
-        周玉佂
-      </h1>
-      <p
-        class="home__role"
-        v-motion
-        :initial="{ opacity: 0, y: 18 }"
-        :enter="{ opacity: 1, y: 0, transition: { duration: 650, delay: 320 } }"
-      >
-        前端开发工程师 · 请选择进入
-      </p>
+    <div
+      class="home__intro"
+      v-motion
+      :initial="{ opacity: 0, y: 28 }"
+      :enter="{ opacity: 1, y: 0, transition: { duration: 750, delay: 80 } }"
+    >
+      <span class="home__intro-glow" aria-hidden="true" />
+      <p class="home__hello">你好，我叫</p>
+      <h1 class="home__name">周玉佂</h1>
+      <p class="home__role">热爱前端开发 · 专注架构设计与体验打磨</p>
     </div>
 
     <div class="home__cards">
@@ -84,10 +64,12 @@ import { RouterLink } from 'vue-router'
   min-height: calc(100svh - 5rem);
   display: flex;
   flex-direction: column;
+  align-items: center;
   justify-content: center;
   gap: clamp(2rem, 5vh, 3.5rem);
   padding: clamp(5rem, 12vh, 7rem) clamp(1.25rem, 6vw, 5rem) 3rem;
   overflow: hidden;
+  text-align: center;
 }
 
 .home__atmosphere {
@@ -137,26 +119,55 @@ import { RouterLink } from 'vue-router'
   z-index: 1;
 }
 
+.home__intro {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: min(100%, 560px);
+  padding: clamp(1.6rem, 4vw, 2.4rem) clamp(1.4rem, 4vw, 2.2rem);
+  border-radius: 28px;
+  overflow: hidden;
+  background: rgba(255, 255, 255, 0.72);
+  border: 1px solid rgba(255, 255, 255, 0.92);
+  box-shadow: 0 18px 50px rgba(22, 53, 47, 0.08);
+  backdrop-filter: blur(14px);
+}
+
+.home__intro-glow {
+  position: absolute;
+  inset: auto -25% -55% 15%;
+  height: 85%;
+  background: radial-gradient(
+    circle,
+    color-mix(in srgb, var(--accent) 22%, transparent),
+    transparent 70%
+  );
+  pointer-events: none;
+}
+
 .home__hello {
+  position: relative;
   margin: 0 0 0.5rem;
   letter-spacing: 0.18em;
   color: var(--ink-muted);
-  font-size: clamp(1rem, 2vw, 1.15rem);
+  font-size: clamp(0.95rem, 2vw, 1.1rem);
 }
 
 .home__name {
+  position: relative;
   margin: 0;
   font-family: var(--font-display);
-  font-size: clamp(3.2rem, 10vw, 6.2rem);
+  font-size: clamp(2.8rem, 8vw, 4.6rem);
   font-weight: 400;
   letter-spacing: 0.08em;
-  line-height: 1.05;
+  line-height: 1.1;
   color: var(--ink);
 }
 
 .home__role {
-  margin: 0.9rem 0 0;
-  font-size: clamp(1rem, 2vw, 1.2rem);
+  position: relative;
+  margin: 0.85rem 0 0;
+  font-size: clamp(0.95rem, 2vw, 1.1rem);
   font-weight: 600;
   color: var(--accent);
 }
@@ -165,17 +176,20 @@ import { RouterLink } from 'vue-router'
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: clamp(1rem, 2.5vw, 1.6rem);
-  max-width: 920px;
+  width: min(100%, 560px);
+  margin-inline: auto;
+  text-align: left;
 }
 
 .entry {
   position: relative;
-  display: grid;
-  grid-template-columns: auto 1fr auto;
-  align-items: center;
+  aspect-ratio: 1 / 1;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: space-between;
   gap: 1rem;
-  min-height: 160px;
-  padding: 1.4rem 1.35rem;
+  padding: clamp(1.15rem, 3vw, 1.55rem);
   text-decoration: none;
   color: inherit;
   border-radius: 24px;
@@ -206,13 +220,13 @@ import { RouterLink } from 'vue-router'
 
 .entry__icon {
   position: relative;
-  width: 3.4rem;
-  height: 3.4rem;
+  width: 3.2rem;
+  height: 3.2rem;
   border-radius: 16px;
   display: grid;
   place-items: center;
   font-family: var(--font-display);
-  font-size: 1.45rem;
+  font-size: 1.4rem;
   color: #f4faf8;
   background: linear-gradient(145deg, #1a6f64, #0d4f47);
   box-shadow: 0 10px 24px rgba(15, 79, 71, 0.28);
@@ -226,24 +240,28 @@ import { RouterLink } from 'vue-router'
 .entry__body {
   position: relative;
   display: grid;
-  gap: 0.35rem;
+  gap: 0.4rem;
+  flex: 1;
+  align-content: end;
 }
 
 .entry__title {
-  font-size: clamp(1.25rem, 2.4vw, 1.55rem);
+  font-size: clamp(1.2rem, 2.2vw, 1.45rem);
   font-weight: 700;
   color: var(--ink);
 }
 
 .entry__desc {
-  font-size: 0.92rem;
-  line-height: 1.55;
+  font-size: 0.88rem;
+  line-height: 1.5;
   color: var(--ink-soft);
 }
 
 .entry__arrow {
-  position: relative;
-  font-size: 1.35rem;
+  position: absolute;
+  top: clamp(1.15rem, 3vw, 1.55rem);
+  right: clamp(1.15rem, 3vw, 1.55rem);
+  font-size: 1.25rem;
   color: var(--accent);
   transition: transform 0.3s ease;
 }
@@ -264,11 +282,31 @@ import { RouterLink } from 'vue-router'
 
 @media (max-width: 720px) {
   .home__cards {
-    grid-template-columns: 1fr;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    width: min(100%, 420px);
   }
 
   .entry {
-    min-height: 132px;
+    border-radius: 18px;
+    padding: 1rem;
+  }
+
+  .entry__icon {
+    width: 2.6rem;
+    height: 2.6rem;
+    border-radius: 12px;
+    font-size: 1.15rem;
+  }
+
+  .entry__desc {
+    font-size: 0.78rem;
+  }
+}
+
+@media (max-width: 420px) {
+  .home__cards {
+    grid-template-columns: 1fr;
+    width: min(100%, 240px);
   }
 }
 </style>
