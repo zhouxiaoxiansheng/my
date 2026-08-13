@@ -11,6 +11,27 @@ export const profile = {
   intent: '前端开发工程师',
   salary: '15-18K',
   city: '杭州',
+  status: '期待新的合作机会',
+  tagline: '前端开发，热爱交互，专注架构设计与注重细节的产品体验。',
+  about:
+    '专注 Web、微信小程序与 Electron 桌面端开发，擅长用 uni-app、H5、TypeScript、Vue、Tailwind CSS 与 Node.js 构建高可用产品。拥有 6 年前端经验（含 4 年工行数据中心核心研发），具备组件化、工程化与跨端架构落地能力，关注用户体验与交付质量。',
+  skills: [
+    'Vue 2 / Vue 3',
+    'TypeScript',
+    'JavaScript (ES6+)',
+    'uni-app',
+    'Electron',
+    'Element Plus',
+    'Vant UI',
+    'ECharts',
+    'Pinia',
+    'Axios',
+    'Tailwind CSS',
+    'Node.js',
+    'Nginx',
+    'Webpack / Vite',
+    'CI/CD',
+  ],
   advantages: [
     {
       title: '金融级背景与 6 年经验',

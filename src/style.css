@@ -10,16 +10,15 @@
   --accent: #0f7a6e;
   --accent-warm: #c47a4a;
 
-  --bg-0: #ecf2ef;
-  --bg-1: #e4ece8;
-  --bg-2: #dfe9e4;
+  --bg-0: #f4f7f9;
+  --bg-1: #eef3f5;
+  --bg-2: #e8eef2;
 
   color: var(--ink);
   background:
-    radial-gradient(1200px 600px at 12% -10%, #d7ebe4 0%, transparent 55%),
-    radial-gradient(900px 500px at 88% 8%, #f1dfcf 0%, transparent 50%),
-    radial-gradient(800px 480px at 70% 100%, #d4e0ec 0%, transparent 55%),
-    linear-gradient(180deg, var(--bg-0), var(--bg-1) 45%, var(--bg-2));
+    radial-gradient(1100px 520px at 10% -8%, #d9ebe6 0%, transparent 55%),
+    radial-gradient(900px 480px at 92% 6%, #dce7f2 0%, transparent 52%),
+    linear-gradient(180deg, var(--bg-0), var(--bg-1) 50%, var(--bg-2));
   font-family: var(--font-body);
   font-synthesis: none;
   text-rendering: optimizeLegibility;

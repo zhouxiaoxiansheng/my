@@ -1,312 +1,630 @@
 <script setup lang="ts">
-import { RouterLink } from 'vue-router'
+import { ref } from 'vue'
+import { profile } from '../data/profile'
+import { experiences } from '../data/experiences'
+import { projects } from '../data/projects'
+
+const openExp = ref<string | null>(experiences[0]?.id ?? null)
+
+const toggleExp = (id: string) => {
+  openExp.value = openExp.value === id ? null : id
+}
+
+const companyInitial = (name: string) => name.slice(0, 1)
+
+const imageSrc = (path: string, ext: 'webp' | 'jpg') =>
+  path.replace(/\.(png|jpe?g|webp)$/i, `.${ext}`)
 </script>
 
 <template>
-  <section class="home">
-    <div class="home__atmosphere" aria-hidden="true">
-      <span class="orb orb--a" />
-      <span class="orb orb--b" />
-      <span class="orb orb--c" />
-    </div>
+  <main id="top" class="home">
+    <section
+      class="hero panel"
+      v-motion
+      :initial="{ opacity: 0, y: 24 }"
+      :enter="{ opacity: 1, y: 0, transition: { duration: 700, delay: 60 } }"
+    >
+      <div class="hero__copy">
+        <p class="hero__status">
+          <span class="hero__dot" aria-hidden="true" />
+          {{ profile.status }}
+        </p>
+        <h1 class="hero__title">
+          你好，我是
+          <span class="hero__name">{{ profile.name }}</span>
+        </h1>
+        <p class="hero__tagline">{{ profile.tagline }}</p>
+      </div>
+      <div class="hero__avatar">
+        <div class="hero__avatar-clip">
+          <img
+            class="hero__avatar-face"
+            src="/avatar.png"
+            :alt="`${profile.name}的头像`"
+            width="140"
+            height="140"
+          />
+        </div>
+      </div>
+    </section>
 
-    <div
-      class="home__intro"
+    <section
+      class="panel about"
       v-motion
       :initial="{ opacity: 0, y: 28 }"
-      :enter="{ opacity: 1, y: 0, transition: { duration: 750, delay: 80 } }"
+      :visibleOnce="{ opacity: 1, y: 0, transition: { duration: 650 } }"
     >
-      <span class="home__intro-glow" aria-hidden="true" />
-      <p class="home__hello">你好，我叫</p>
-      <h1 class="home__name">周玉佂</h1>
-      <p class="home__role">热爱前端开发 · 专注架构设计与体验打磨</p>
-    </div>
+      <h2 class="section-title">关于我</h2>
+      <p class="about__text">{{ profile.about }}</p>
+    </section>
 
-    <div class="home__cards">
-      <RouterLink
-        class="entry"
-        to="/resume"
-        v-motion
-        :initial="{ opacity: 0, y: 42 }"
-        :enter="{ opacity: 1, y: 0, transition: { duration: 750, delay: 420 } }"
-      >
-        <span class="entry__glow" aria-hidden="true" />
-        <span class="entry__icon" aria-hidden="true">简</span>
-        <span class="entry__body">
-          <span class="entry__title">个人简历</span>
-          <span class="entry__desc">工作经历、项目亮点与求职信息</span>
-        </span>
-        <span class="entry__arrow" aria-hidden="true">→</span>
-      </RouterLink>
+    <section class="block">
+      <h2 class="section-title">工作经历</h2>
+      <div class="exp-list">
+        <article
+          v-for="(job, index) in experiences"
+          :key="job.id"
+          class="exp-card"
+          :class="{ 'exp-card--open': openExp === job.id }"
+          v-motion
+          :initial="{ opacity: 0, y: 24 }"
+          :visibleOnce="{
+            opacity: 1,
+            y: 0,
+            transition: { duration: 600, delay: index * 70 },
+          }"
+        >
+          <button class="exp-card__toggle" type="button" @click="toggleExp(job.id)">
+            <span class="exp-card__logo" aria-hidden="true">{{ companyInitial(job.company) }}</span>
+            <span class="exp-card__meta">
+              <span class="exp-card__company">{{ job.company }}</span>
+              <span class="exp-card__role">{{ job.role }}</span>
+              <span class="exp-card__period">{{ job.period }}</span>
+            </span>
+            <span class="exp-card__chevron" aria-hidden="true">⌃</span>
+          </button>
+          <ul v-show="openExp === job.id" class="exp-card__points">
+            <li v-for="(point, i) in job.highlights" :key="i">{{ point }}</li>
+          </ul>
+        </article>
+      </div>
+    </section>
 
-      <RouterLink
-        class="entry entry--blog"
-        to="/blog"
-        v-motion
-        :initial="{ opacity: 0, y: 42 }"
-        :enter="{ opacity: 1, y: 0, transition: { duration: 750, delay: 540 } }"
-      >
-        <span class="entry__glow" aria-hidden="true" />
-        <span class="entry__icon" aria-hidden="true">博</span>
-        <span class="entry__body">
-          <span class="entry__title">个人博客</span>
-          <span class="entry__desc">项目手记与工程实践，阅读向更新</span>
-        </span>
-        <span class="entry__arrow" aria-hidden="true">→</span>
-      </RouterLink>
-    </div>
-  </section>
+    <section class="block">
+      <h2 class="section-title">技能</h2>
+      <ul class="skills">
+        <li v-for="skill in profile.skills" :key="skill">{{ skill }}</li>
+      </ul>
+    </section>
+
+    <section id="projects" class="projects">
+      <p class="projects__badge">项目经历</p>
+      <h2 class="projects__title">看看我最近的作品</h2>
+      <p class="projects__lead">
+        从医疗多端产品到金融中后台，这里挑选了近期最有代表性的项目。
+      </p>
+
+      <div class="projects__grid">
+        <article
+          v-for="(project, index) in projects"
+          :key="project.id"
+          class="project-card"
+          :style="{ '--accent': project.accent }"
+          v-motion
+          :initial="{ opacity: 0, y: 36 }"
+          :visibleOnce="{
+            opacity: 1,
+            y: 0,
+            transition: { duration: 700, delay: index * 80 },
+          }"
+        >
+          <div class="project-card__media">
+            <picture>
+              <source :srcset="imageSrc(project.image, 'webp')" type="image/webp" />
+              <img
+                :src="imageSrc(project.image, 'jpg')"
+                :alt="project.title"
+                width="960"
+                height="600"
+                loading="lazy"
+                decoding="async"
+              />
+            </picture>
+          </div>
+          <div class="project-card__body">
+            <h3>{{ project.title }}</h3>
+            <time>{{ project.period }}</time>
+            <p>{{ project.summary }}</p>
+            <ul class="project-card__tags">
+              <li v-for="tag in project.stack" :key="tag">{{ tag }}</li>
+            </ul>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section
+      class="contact"
+      v-motion
+      :initial="{ opacity: 0, y: 28 }"
+      :visibleOnce="{ opacity: 1, y: 0, transition: { duration: 700 } }"
+    >
+      <div class="contact__copy">
+        <p class="contact__eyebrow">保持联系</p>
+        <h2>期待与你取得联系</h2>
+        <p>欢迎通过电话或邮箱沟通合作机会与技术交流。</p>
+      </div>
+      <div class="contact__actions">
+        <a class="contact__btn" :href="`tel:${profile.phone}`">
+          <span class="contact__icon" aria-hidden="true">☎</span>
+          <span>{{ profile.phone }}</span>
+          <span class="contact__arrow" aria-hidden="true">→</span>
+        </a>
+        <a class="contact__btn" :href="`mailto:${profile.email}`">
+          <span class="contact__icon" aria-hidden="true">✉</span>
+          <span>{{ profile.email }}</span>
+          <span class="contact__arrow" aria-hidden="true">→</span>
+        </a>
+      </div>
+    </section>
+  </main>
 </template>
 
 <style scoped>
 .home {
-  position: relative;
-  min-height: calc(100svh - 5rem);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: clamp(2rem, 5vh, 3.5rem);
-  padding: clamp(5rem, 12vh, 7rem) clamp(1.25rem, 6vw, 5rem) 3rem;
-  overflow: hidden;
-  text-align: center;
+  width: min(100% - 2rem, 980px);
+  margin: 0 auto;
+  padding: 1.25rem 0 2.5rem;
+  display: grid;
+  gap: 1.15rem;
 }
 
-.home__atmosphere {
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  z-index: 0;
-}
-
-.orb {
-  position: absolute;
-  border-radius: 50%;
-  filter: blur(48px);
-  opacity: 0.55;
-  animation: drift 14s ease-in-out infinite;
-}
-
-.orb--a {
-  width: min(48vw, 480px);
-  height: min(48vw, 480px);
-  top: -10%;
-  left: -6%;
-  background: radial-gradient(circle, #9fd6c8 0%, transparent 70%);
-}
-
-.orb--b {
-  width: min(38vw, 400px);
-  height: min(38vw, 400px);
-  right: 4%;
-  top: 20%;
-  background: radial-gradient(circle, #f0c9a8 0%, transparent 70%);
-  animation-delay: -4s;
-}
-
-.orb--c {
-  width: min(34vw, 360px);
-  height: min(34vw, 360px);
-  bottom: -8%;
-  left: 40%;
-  background: radial-gradient(circle, #a8c4e0 0%, transparent 70%);
-  animation-delay: -8s;
-}
-
-.home__intro,
-.home__cards {
-  position: relative;
-  z-index: 1;
-}
-
-.home__intro {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  width: min(100%, 560px);
-  padding: clamp(1.6rem, 4vw, 2.4rem) clamp(1.4rem, 4vw, 2.2rem);
+.panel {
+  background: rgba(255, 255, 255, 0.92);
+  border: 1px solid rgba(255, 255, 255, 0.98);
   border-radius: 28px;
+  box-shadow: 0 16px 40px rgba(22, 53, 47, 0.06);
+}
+
+.hero {
+  display: grid;
+  grid-template-columns: 1.4fr 0.8fr;
+  align-items: center;
+  gap: 1.5rem;
+  padding: clamp(1.5rem, 4vw, 2.4rem);
   overflow: hidden;
-  background: rgba(255, 255, 255, 0.72);
-  border: 1px solid rgba(255, 255, 255, 0.92);
-  box-shadow: 0 18px 50px rgba(22, 53, 47, 0.08);
-  backdrop-filter: blur(14px);
 }
 
-.home__intro-glow {
-  position: absolute;
-  inset: auto -25% -55% 15%;
-  height: 85%;
-  background: radial-gradient(
-    circle,
-    color-mix(in srgb, var(--accent) 22%, transparent),
-    transparent 70%
-  );
-  pointer-events: none;
+.hero__status {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  margin: 0 0 1rem;
+  padding: 0.35rem 0.75rem;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--accent) 8%, white);
+  color: var(--ink-soft);
+  font-size: 0.82rem;
+  font-weight: 600;
 }
 
-.home__hello {
-  position: relative;
-  margin: 0 0 0.5rem;
-  letter-spacing: 0.18em;
-  color: var(--ink-muted);
-  font-size: clamp(0.95rem, 2vw, 1.1rem);
+.hero__dot {
+  width: 0.5rem;
+  height: 0.5rem;
+  border-radius: 50%;
+  background: #22a06b;
+  box-shadow: 0 0 0 4px rgba(34, 160, 107, 0.16);
 }
 
-.home__name {
-  position: relative;
+.hero__title {
   margin: 0;
-  font-family: var(--font-display);
-  font-size: clamp(2.8rem, 8vw, 4.6rem);
-  font-weight: 400;
-  letter-spacing: 0.08em;
-  line-height: 1.1;
+  font-size: clamp(1.85rem, 4.5vw, 2.6rem);
+  font-weight: 700;
+  line-height: 1.25;
   color: var(--ink);
 }
 
-.home__role {
-  position: relative;
-  margin: 0.85rem 0 0;
-  font-size: clamp(0.95rem, 2vw, 1.1rem);
-  font-weight: 600;
-  color: var(--accent);
+.hero__name {
+  background: linear-gradient(105deg, #0f7a6e 0%, #2f8f7a 45%, #3a6ea5 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
 }
 
-.home__cards {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: clamp(1rem, 2.5vw, 1.6rem);
-  width: min(100%, 560px);
-  margin-inline: auto;
-  text-align: left;
+.hero__tagline {
+  margin: 0.9rem 0 0;
+  max-width: 34rem;
+  font-size: clamp(0.95rem, 1.8vw, 1.05rem);
+  line-height: 1.75;
+  color: var(--ink-soft);
 }
 
-.entry {
-  position: relative;
-  aspect-ratio: 1 / 1;
+.hero__avatar {
   display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  justify-content: space-between;
-  gap: 1rem;
-  padding: clamp(1.15rem, 3vw, 1.55rem);
-  text-decoration: none;
-  color: inherit;
-  border-radius: 24px;
+  justify-content: center;
+  align-items: center;
+}
+
+.hero__avatar-clip {
+  width: 132px;
+  height: 132px;
+  border-radius: 50%;
   overflow: hidden;
-  background: rgba(255, 255, 255, 0.72);
-  border: 1px solid rgba(255, 255, 255, 0.92);
-  box-shadow: 0 18px 50px rgba(22, 53, 47, 0.08);
-  backdrop-filter: blur(14px);
-  transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.35s ease;
+  box-shadow:
+    0 0 0 5px rgba(255, 255, 255, 0.95),
+    0 0 0 7px color-mix(in srgb, var(--accent) 18%, transparent),
+    0 14px 32px rgba(15, 122, 110, 0.14);
 }
 
-.entry:hover {
-  transform: translateY(-6px);
-  box-shadow: 0 28px 64px rgba(22, 53, 47, 0.14);
+.hero__avatar-face {
+  width: 100%;
+  height: 100%;
+  max-width: none;
+  object-fit: cover;
+  object-position: center 8%;
+  transform: scale(1.35);
+  transform-origin: center 18%;
 }
 
-.entry__glow {
-  position: absolute;
-  inset: auto -20% -40% 20%;
-  height: 70%;
-  background: radial-gradient(circle, color-mix(in srgb, var(--accent) 28%, transparent), transparent 70%);
-  pointer-events: none;
+.about {
+  padding: clamp(1.3rem, 3vw, 1.8rem);
 }
 
-.entry--blog .entry__glow {
-  background: radial-gradient(circle, rgba(196, 122, 74, 0.28), transparent 70%);
-}
-
-.entry__icon {
-  position: relative;
-  width: 3.2rem;
-  height: 3.2rem;
-  border-radius: 16px;
-  display: grid;
-  place-items: center;
-  font-family: var(--font-display);
-  font-size: 1.4rem;
-  color: #f4faf8;
-  background: linear-gradient(145deg, #1a6f64, #0d4f47);
-  box-shadow: 0 10px 24px rgba(15, 79, 71, 0.28);
-}
-
-.entry--blog .entry__icon {
-  background: linear-gradient(145deg, #c47a4a, #8f5230);
-  box-shadow: 0 10px 24px rgba(143, 82, 48, 0.25);
-}
-
-.entry__body {
-  position: relative;
-  display: grid;
-  gap: 0.4rem;
-  flex: 1;
-  align-content: end;
-}
-
-.entry__title {
-  font-size: clamp(1.2rem, 2.2vw, 1.45rem);
+.section-title {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  margin: 0 0 0.9rem;
+  font-size: 1.15rem;
   font-weight: 700;
   color: var(--ink);
 }
 
-.entry__desc {
-  font-size: 0.88rem;
-  line-height: 1.5;
+.section-title::after {
+  content: '';
+  width: 2.2rem;
+  height: 3px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, #0f7a6e, #3a6ea5);
+}
+
+.about__text {
+  margin: 0;
+  font-size: 0.95rem;
+  line-height: 1.85;
   color: var(--ink-soft);
 }
 
-.entry__arrow {
-  position: absolute;
-  top: clamp(1.15rem, 3vw, 1.55rem);
-  right: clamp(1.15rem, 3vw, 1.55rem);
-  font-size: 1.25rem;
+.block {
+  padding: 0.35rem 0.15rem 0;
+}
+
+.exp-list {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.exp-card {
+  background: rgba(255, 255, 255, 0.92);
+  border: 1px solid rgba(16, 47, 42, 0.06);
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 10px 28px rgba(22, 53, 47, 0.05);
+}
+
+.exp-card__toggle {
+  width: 100%;
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 0.9rem;
+  padding: 1rem 1.1rem;
+  border: 0;
+  background: transparent;
+  text-align: left;
+  cursor: pointer;
+  font: inherit;
+  color: inherit;
+}
+
+.exp-card__logo {
+  width: 2.6rem;
+  height: 2.6rem;
+  border-radius: 0.85rem;
+  display: grid;
+  place-items: center;
+  color: #fff;
+  font-weight: 700;
+  background: linear-gradient(145deg, #1a6f64, #0d4f47);
+}
+
+.exp-card__meta {
+  display: grid;
+  gap: 0.18rem;
+  min-width: 0;
+}
+
+.exp-card__company {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--ink);
+}
+
+.exp-card__role {
+  font-size: 0.88rem;
+  font-weight: 600;
   color: var(--accent);
-  transition: transform 0.3s ease;
 }
 
-.entry:hover .entry__arrow {
-  transform: translateX(4px);
+.exp-card__period {
+  font-size: 0.8rem;
+  color: var(--ink-muted);
 }
 
-@keyframes drift {
-  0%,
-  100% {
-    transform: translate3d(0, 0, 0) scale(1);
-  }
-  50% {
-    transform: translate3d(20px, -16px, 0) scale(1.05);
-  }
+.exp-card__chevron {
+  color: var(--ink-muted);
+  font-size: 1rem;
+  transition: transform 0.25s ease;
 }
 
-@media (max-width: 720px) {
-  .home__cards {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    width: min(100%, 420px);
-  }
-
-  .entry {
-    border-radius: 18px;
-    padding: 1rem;
-  }
-
-  .entry__icon {
-    width: 2.6rem;
-    height: 2.6rem;
-    border-radius: 12px;
-    font-size: 1.15rem;
-  }
-
-  .entry__desc {
-    font-size: 0.78rem;
-  }
+.exp-card--open .exp-card__chevron {
+  transform: rotate(0deg);
 }
 
-@media (max-width: 420px) {
-  .home__cards {
+.exp-card:not(.exp-card--open) .exp-card__chevron {
+  transform: rotate(180deg);
+}
+
+.exp-card__points {
+  margin: 0;
+  padding: 0 1.1rem 1.1rem 4.6rem;
+  list-style: none;
+  display: grid;
+  gap: 0.45rem;
+}
+
+.exp-card__points li {
+  position: relative;
+  padding-left: 0.85rem;
+  font-size: 0.9rem;
+  line-height: 1.7;
+  color: var(--ink-soft);
+}
+
+.exp-card__points li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0.62em;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--accent);
+}
+
+.skills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.55rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.skills li {
+  padding: 0.42rem 0.8rem;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--accent) 10%, white);
+  border: 1px solid color-mix(in srgb, var(--accent) 16%, transparent);
+  color: #1a4f55;
+  font-size: 0.84rem;
+  font-weight: 600;
+}
+
+.projects {
+  margin-top: 1.2rem;
+  padding: 1rem 0 0.4rem;
+  text-align: center;
+}
+
+.projects__badge {
+  display: inline-flex;
+  margin: 0 0 0.7rem;
+  padding: 0.28rem 0.75rem;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--accent) 12%, white);
+  color: var(--accent);
+  font-size: 0.8rem;
+  font-weight: 700;
+}
+
+.projects__title {
+  margin: 0;
+  font-size: clamp(1.5rem, 3.5vw, 2rem);
+  font-weight: 700;
+  color: var(--ink);
+}
+
+.projects__lead {
+  margin: 0.7rem auto 1.4rem;
+  max-width: 34rem;
+  color: var(--ink-soft);
+  font-size: 0.95rem;
+  line-height: 1.7;
+}
+
+.projects__grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+  text-align: left;
+}
+
+.project-card {
+  background: rgba(255, 255, 255, 0.95);
+  border: 1px solid rgba(16, 47, 42, 0.06);
+  border-radius: 22px;
+  overflow: hidden;
+  box-shadow: 0 14px 36px rgba(22, 53, 47, 0.06);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.project-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 22px 48px rgba(22, 53, 47, 0.1);
+}
+
+.project-card__media {
+  aspect-ratio: 16 / 10;
+  background: #dfe8e4;
+  overflow: hidden;
+}
+
+.project-card__media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.6s ease;
+}
+
+.project-card:hover .project-card__media img {
+  transform: scale(1.04);
+}
+
+.project-card__body {
+  display: grid;
+  gap: 0.45rem;
+  padding: 1.1rem 1.15rem 1.25rem;
+}
+
+.project-card__body h3 {
+  margin: 0;
+  font-size: 1.05rem;
+  color: var(--ink);
+}
+
+.project-card__body time {
+  font-size: 0.82rem;
+  color: var(--accent);
+  font-weight: 600;
+}
+
+.project-card__body p {
+  margin: 0.15rem 0 0;
+  font-size: 0.88rem;
+  line-height: 1.65;
+  color: var(--ink-soft);
+}
+
+.project-card__tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin: 0.35rem 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.project-card__tags li {
+  padding: 0.25rem 0.55rem;
+  border-radius: 999px;
+  background: #eef2f4;
+  color: var(--ink-soft);
+  font-size: 0.74rem;
+  font-weight: 600;
+}
+
+.contact {
+  margin-top: 0.6rem;
+  display: grid;
+  grid-template-columns: 1.2fr 0.9fr;
+  gap: 1.4rem;
+  align-items: center;
+  padding: clamp(1.4rem, 3.5vw, 2rem);
+  border-radius: 28px;
+  color: #f4faf8;
+  background:
+    radial-gradient(500px 220px at 85% 20%, rgba(255, 255, 255, 0.14), transparent 60%),
+    linear-gradient(125deg, #0d4f47 0%, #145f6e 48%, #1f4d78 100%);
+  box-shadow: 0 20px 50px rgba(13, 79, 71, 0.22);
+}
+
+.contact__eyebrow {
+  margin: 0 0 0.45rem;
+  font-size: 0.85rem;
+  opacity: 0.78;
+}
+
+.contact h2 {
+  margin: 0;
+  font-size: clamp(1.35rem, 3vw, 1.8rem);
+}
+
+.contact__copy p:last-child {
+  margin: 0.55rem 0 0;
+  opacity: 0.82;
+  font-size: 0.92rem;
+  line-height: 1.6;
+}
+
+.contact__actions {
+  display: grid;
+  gap: 0.7rem;
+}
+
+.contact__btn {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.9rem 1rem;
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  color: inherit;
+  text-decoration: none;
+  transition: background 0.25s ease;
+}
+
+.contact__btn:hover {
+  background: rgba(255, 255, 255, 0.16);
+}
+
+.contact__icon {
+  width: 2rem;
+  height: 2rem;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  background: rgba(255, 255, 255, 0.16);
+  font-size: 0.85rem;
+}
+
+.contact__arrow {
+  opacity: 0.7;
+}
+
+@media (max-width: 820px) {
+  .hero,
+  .contact {
     grid-template-columns: 1fr;
-    width: min(100%, 240px);
+  }
+
+  .hero__avatar {
+    order: -1;
+  }
+
+  .hero__avatar-clip {
+    width: 112px;
+    height: 112px;
+  }
+
+  .projects__grid {
+    grid-template-columns: 1fr;
+  }
+
+  .exp-card__points {
+    padding-left: 1.1rem;
   }
 }
 </style>

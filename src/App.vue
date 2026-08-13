@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { RouterView, useRoute } from 'vue-router'
+import { RouterLink, RouterView, useRoute } from 'vue-router'
 import { computed } from 'vue'
 
 const route = useRoute()
@@ -9,16 +9,22 @@ const isHome = computed(() => route.name === 'home')
 <template>
   <div class="page">
     <nav v-if="isHome" class="nav">
-      <div class="nav__links">
-        <a
-          class="nav__link"
-          href="https://github.com/zhouxiaoxiansheng/my"
-          rel="noreferrer"
-          target="_blank"
-        >
-          GitHub
-        </a>
+      <div class="nav__brand-group">
+        <RouterLink class="nav__mark" to="/" aria-label="首页">ZY</RouterLink>
+        <div class="nav__menu">
+          <a class="nav__item nav__item--active" href="#top">个人作品集</a>
+          <RouterLink class="nav__item" to="/resume">个人简历</RouterLink>
+          <RouterLink class="nav__item" to="/blog">博客</RouterLink>
+        </div>
       </div>
+      <a
+        class="nav__github"
+        href="https://github.com/zhouxiaoxiansheng/my"
+        rel="noreferrer"
+        target="_blank"
+      >
+        GitHub
+      </a>
     </nav>
 
     <RouterView />
@@ -58,34 +64,79 @@ const isHome = computed(() => route.name === 'home')
 }
 
 .nav {
-  position: fixed;
+  position: sticky;
   top: 0;
-  left: 0;
-  right: 0;
   z-index: 20;
   display: flex;
   align-items: center;
-  justify-content: flex-end;
-  padding: 1rem clamp(1.25rem, 5vw, 3.5rem);
-  background: linear-gradient(to bottom, rgba(236, 242, 239, 0.88), rgba(236, 242, 239, 0));
-  backdrop-filter: blur(8px);
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.85rem clamp(1.25rem, 5vw, 3.5rem);
+  background: rgba(244, 247, 249, 0.88);
+  border-bottom: 1px solid rgba(16, 47, 42, 0.06);
+  backdrop-filter: blur(12px);
 }
 
-.nav__links {
+.nav__brand-group {
   display: flex;
   align-items: center;
-  gap: 1.1rem;
+  gap: 0.85rem;
+  min-width: 0;
 }
 
-.nav__link {
+.nav__mark {
+  display: grid;
+  place-items: center;
+  width: 2rem;
+  height: 2rem;
+  border-radius: 0.55rem;
+  background: linear-gradient(145deg, #1a6f64, #0d4f47);
+  color: #f4faf8;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-decoration: none;
+  flex-shrink: 0;
+}
+
+.nav__menu {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.15rem 0.15rem;
+}
+
+.nav__item {
+  padding: 0.4rem 0.7rem;
+  border-radius: 999px;
   font-size: 0.9rem;
   font-weight: 600;
   color: var(--ink-soft);
   text-decoration: none;
-  transition: color 0.25s ease;
+  transition: color 0.2s ease, background 0.2s ease;
 }
 
-.nav__link:hover {
+.nav__item:hover,
+.nav__item--active {
+  color: var(--accent);
+  background: color-mix(in srgb, var(--accent) 10%, white);
+}
+
+.nav__github {
+  flex-shrink: 0;
+  padding: 0.45rem 0.95rem;
+  border-radius: 999px;
+  border: 1px solid rgba(16, 47, 42, 0.1);
+  background: rgba(255, 255, 255, 0.8);
+  color: var(--ink);
+  font-size: 0.86rem;
+  font-weight: 600;
+  text-decoration: none;
+  transition: border-color 0.2s ease, color 0.2s ease;
+}
+
+.nav__github:hover {
+  border-color: color-mix(in srgb, var(--accent) 40%, transparent);
   color: var(--accent);
 }
 
@@ -131,5 +182,12 @@ const isHome = computed(() => route.name === 'home')
 
 .footer__sep {
   opacity: 0.45;
+}
+
+@media (max-width: 640px) {
+  .nav__item {
+    padding: 0.35rem 0.5rem;
+    font-size: 0.82rem;
+  }
 }
 </style>
