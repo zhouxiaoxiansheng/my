@@ -10,6 +10,8 @@ const props = defineProps<{
 const open = ref(false)
 const hasNotes = computed(() => props.post.highlights.length > 0)
 const delay = computed(() => 40 + Math.min(props.index, 12) * 40)
+const webpSrc = computed(() => props.post.image?.replace(/\.(png|jpe?g|webp)$/i, '.webp') ?? '')
+const jpgSrc = computed(() => props.post.image?.replace(/\.(png|jpe?g|webp)$/i, '.jpg') ?? '')
 </script>
 
 <template>
@@ -25,7 +27,17 @@ const delay = computed(() => 40 + Math.min(props.index, 12) * 40)
     }"
   >
     <div class="post__cover">
-      <img v-if="post.image" :src="post.image" :alt="post.blogTitle" loading="lazy" />
+      <picture v-if="post.image">
+        <source :srcset="webpSrc" type="image/webp" />
+        <img
+          :src="jpgSrc"
+          :alt="post.blogTitle"
+          width="480"
+          height="360"
+          loading="lazy"
+          decoding="async"
+        />
+      </picture>
       <div v-else class="post__placeholder">
         <span class="post__no">{{ post.no ?? String(index + 1).padStart(2, '0') }}</span>
         <span class="post__placeholder-label">项目手记</span>

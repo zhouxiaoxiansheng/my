@@ -22,7 +22,7 @@ export const projects: Project[] = [
       'PC 管理端 Element + 移动端 Vant 双 UI 方案，结合 Flex 与媒体查询实现全端适配',
       '基于 SSE 构建 AI 心理评估助手，实现流式问答与报告智能解读',
     ],
-    image: '/projects/mind-camera.png',
+    image: '/projects/mind-camera.webp',
     accent: '#0f7a6e',
   },
   {
@@ -37,7 +37,7 @@ export const projects: Project[] = [
       'Pinia 统一会话状态：历史持久化、Prompt 上下文拼接、失败重试，提升交互稳定性',
       '分包预加载 + CDN，主包控制在 1.5MB 内，冷启动时间下降约 40%',
     ],
-    image: '/projects/shanzhidao.png',
+    image: '/projects/shanzhidao.webp',
     accent: '#2f8f5b',
   },
   {
@@ -51,7 +51,7 @@ export const projects: Project[] = [
       'Electron 双屏：医生主屏 + 患者副屏，storage 事件闭环同步，低延迟任务联动',
       'Node.js 子进程托管 JAR 与本地库，一键启停，无网环境下可完整离线运行',
     ],
-    image: '/projects/cognitive-rehab.png',
+    image: '/projects/cognitive-rehab.webp',
     accent: '#3a6ea5',
   },
   {
@@ -66,7 +66,7 @@ export const projects: Project[] = [
       'ECharts 动态图表与富文本组件封装，keep-alive 多标签缓存，回访加载提速约一倍',
       '路由守卫 + 动态路由，实现按钮级细粒度权限控制',
     ],
-    image: '/projects/consistency-check.png',
+    image: '/projects/consistency-check.webp',
     accent: '#5b6b8c',
   },
 ]

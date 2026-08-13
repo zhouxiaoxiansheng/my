@@ -11,6 +11,8 @@ const cardRef = ref<HTMLElement | null>(null)
 const tilt = ref({ x: 0, y: 0 })
 
 const delay = computed(() => 80 + props.index * 90)
+const webpSrc = computed(() => props.project.image.replace(/\.(png|jpe?g|webp)$/i, '.webp'))
+const jpgSrc = computed(() => props.project.image.replace(/\.(png|jpe?g|webp)$/i, '.jpg'))
 
 const onMove = (e: MouseEvent) => {
   const el = cardRef.value
@@ -48,11 +50,17 @@ const onLeave = () => {
     @mouseleave="onLeave"
   >
     <div class="card__media">
-      <img
-        :src="project.image"
-        :alt="`${project.title} 登录界面`"
-        loading="lazy"
-      />
+      <picture>
+        <source :srcset="webpSrc" type="image/webp" />
+        <img
+          :src="jpgSrc"
+          :alt="`${project.title} 登录界面`"
+          width="960"
+          height="600"
+          loading="lazy"
+          decoding="async"
+        />
+      </picture>
       <div class="card__media-glow" />
     </div>
 
