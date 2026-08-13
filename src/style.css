@@ -1,0 +1,63 @@
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;600;700&family=ZCOOL+XiaoWei&display=swap');
+
+:root {
+  --font-display: 'ZCOOL XiaoWei', 'Noto Sans SC', serif;
+  --font-body: 'Noto Sans SC', sans-serif;
+
+  --ink: #102f2a;
+  --ink-soft: #3d5751;
+  --ink-muted: #6a807a;
+  --accent: #0f7a6e;
+  --accent-warm: #c47a4a;
+
+  --bg-0: #ecf2ef;
+  --bg-1: #e4ece8;
+  --bg-2: #dfe9e4;
+
+  color: var(--ink);
+  background:
+    radial-gradient(1200px 600px at 12% -10%, #d7ebe4 0%, transparent 55%),
+    radial-gradient(900px 500px at 88% 8%, #f1dfcf 0%, transparent 50%),
+    radial-gradient(800px 480px at 70% 100%, #d4e0ec 0%, transparent 55%),
+    linear-gradient(180deg, var(--bg-0), var(--bg-1) 45%, var(--bg-2));
+  font-family: var(--font-body);
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  min-width: 320px;
+  min-height: 100svh;
+}
+
+#app {
+  width: 100%;
+}
+
+img {
+  max-width: 100%;
+  display: block;
+}
+
+button,
+a {
+  -webkit-tap-highlight-color: transparent;
+}
+
+::selection {
+  background: color-mix(in srgb, var(--accent) 28%, white);
+  color: var(--ink);
+}
