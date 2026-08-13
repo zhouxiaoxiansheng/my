@@ -1,14 +1,16 @@
 <script setup lang="ts">
-import HeroSection from './components/HeroSection.vue'
-import ProjectsSection from './components/ProjectsSection.vue'
+import { RouterLink, RouterView, useRoute } from 'vue-router'
+import { computed } from 'vue'
+
+const route = useRoute()
+const isHome = computed(() => route.name === 'home')
 </script>
 
 <template>
   <div class="page">
-    <nav class="nav">
-      <span class="nav__brand">周玉佂</span>
+    <nav v-if="isHome" class="nav">
+      <RouterLink class="nav__brand" to="/">周玉佂</RouterLink>
       <div class="nav__links">
-        <a class="nav__link" href="#projects">项目</a>
         <a
           class="nav__link"
           href="https://github.com/zhouxiaoxiansheng/my"
@@ -20,10 +22,9 @@ import ProjectsSection from './components/ProjectsSection.vue'
       </div>
     </nav>
 
-    <HeroSection />
-    <ProjectsSection />
+    <RouterView />
 
-    <footer class="footer">
+    <footer v-if="isHome" class="footer">
       <p class="footer__line">
         <a href="https://beian.miit.gov.cn/" rel="noreferrer" target="_blank">
           蜀ICP备2026023839号-1
@@ -35,7 +36,7 @@ import ProjectsSection from './components/ProjectsSection.vue'
           rel="noreferrer"
           target="_blank"
         >
-          <img src="/beian.png" alt="" width="16" height="16" />
+          <img src="/beian.png" alt="" width="12" height="12" />
           川公网安备51068202000299号
         </a>
         <span class="footer__sep" aria-hidden="true">|</span>
@@ -53,6 +54,8 @@ import ProjectsSection from './components/ProjectsSection.vue'
 .page {
   position: relative;
   min-height: 100svh;
+  display: flex;
+  flex-direction: column;
 }
 
 .nav {
@@ -74,6 +77,7 @@ import ProjectsSection from './components/ProjectsSection.vue'
   font-size: 1.15rem;
   letter-spacing: 0.12em;
   color: var(--ink);
+  text-decoration: none;
 }
 
 .nav__links {
@@ -95,10 +99,11 @@ import ProjectsSection from './components/ProjectsSection.vue'
 }
 
 .footer {
-  padding: 2rem clamp(1.25rem, 5vw, 3.5rem) 2.75rem;
+  margin-top: auto;
+  padding: 1.25rem clamp(1.25rem, 5vw, 3.5rem) 1.75rem;
   text-align: center;
   color: var(--ink-muted);
-  font-size: 0.82rem;
+  font-size: 0.68rem;
 }
 
 .footer__line {
@@ -107,8 +112,8 @@ import ProjectsSection from './components/ProjectsSection.vue'
   flex-wrap: wrap;
   align-items: center;
   justify-content: center;
-  gap: 0.45rem 0.65rem;
-  line-height: 1.6;
+  gap: 0.3rem 0.45rem;
+  line-height: 1.5;
 }
 
 .footer a {
@@ -124,12 +129,12 @@ import ProjectsSection from './components/ProjectsSection.vue'
 .footer__police {
   display: inline-flex;
   align-items: center;
-  gap: 0.3rem;
+  gap: 0.2rem;
 }
 
 .footer__police img {
-  width: 16px;
-  height: 16px;
+  width: 12px;
+  height: 12px;
   flex-shrink: 0;
 }
 
