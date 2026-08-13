@@ -28,7 +28,7 @@ export const projects: Project[] = [
   {
     id: 'shanzhidao',
     title: '膳智道 AI 智能健康管理小程序',
-    period: '2024.03 — 至今',
+    period: '2026.06 — 至今',
     stack: ['uni-app', 'Vue 3', 'TypeScript', '豆包 AI', 'SSE', 'Tailwind CSS'],
     summary:
       '基于豆包大模型的智能健康食谱推荐与膳食管理小程序，提供 AI 膳食诊断、对话式膳食规划与健康指标追踪。',
