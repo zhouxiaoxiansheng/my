@@ -7,7 +7,17 @@ import ProjectsSection from './components/ProjectsSection.vue'
   <div class="page">
     <nav class="nav">
       <span class="nav__brand">周玉佂</span>
-      <a class="nav__link" href="#projects">项目</a>
+      <div class="nav__links">
+        <a class="nav__link" href="#projects">项目</a>
+        <a
+          class="nav__link"
+          href="https://github.com/zhouxiaoxiansheng/my"
+          rel="noreferrer"
+          target="_blank"
+        >
+          GitHub
+        </a>
+      </div>
     </nav>
 
     <HeroSection />
@@ -27,6 +37,10 @@ import ProjectsSection from './components/ProjectsSection.vue'
         >
           <img src="/beian.png" alt="" width="16" height="16" />
           川公网安备51068202000299号
+        </a>
+        <span class="footer__sep" aria-hidden="true">|</span>
+        <a href="https://github.com/zhouxiaoxiansheng/my" rel="noreferrer" target="_blank">
+          GitHub
         </a>
         <span class="footer__sep" aria-hidden="true">|</span>
         <span>&copy; 2026 什邡市周玉佂百货商行 版权所有</span>
@@ -60,6 +74,12 @@ import ProjectsSection from './components/ProjectsSection.vue'
   font-size: 1.15rem;
   letter-spacing: 0.12em;
   color: var(--ink);
+}
+
+.nav__links {
+  display: flex;
+  align-items: center;
+  gap: 1.1rem;
 }
 
 .nav__link {

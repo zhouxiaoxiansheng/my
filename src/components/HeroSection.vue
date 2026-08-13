@@ -65,6 +65,14 @@ const scrollToProjects = () => {
           查看最近项目
           <span class="cta__arrow" aria-hidden="true">↓</span>
         </button>
+        <a
+          class="cta cta--ghost"
+          href="https://github.com/zhouxiaoxiansheng/my"
+          rel="noreferrer"
+          target="_blank"
+        >
+          GitHub 源码
+        </a>
       </div>
     </div>
 
@@ -185,6 +193,10 @@ const scrollToProjects = () => {
 
 .hero__actions {
   margin-top: 2rem;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem;
 }
 
 .cta {
@@ -201,13 +213,27 @@ const scrollToProjects = () => {
   font-weight: 600;
   letter-spacing: 0.04em;
   cursor: pointer;
-  transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.35s ease;
+  text-decoration: none;
+  transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.35s ease,
+    background 0.25s ease, color 0.25s ease;
   box-shadow: 0 14px 34px rgba(15, 47, 42, 0.22);
 }
 
 .cta:hover {
   transform: translateY(-3px);
   box-shadow: 0 18px 40px rgba(15, 47, 42, 0.28);
+}
+
+.cta--ghost {
+  background: transparent;
+  color: var(--ink);
+  border: 1.5px solid color-mix(in srgb, var(--ink) 22%, transparent);
+  box-shadow: none;
+}
+
+.cta--ghost:hover {
+  background: rgba(255, 255, 255, 0.55);
+  box-shadow: 0 10px 28px rgba(15, 47, 42, 0.08);
 }
 
 .cta__arrow {
